@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>WSCT.Fake.TB100Like</RootNamespace>
+    <Authors>Sylvain Vernois</Authors>
+    <Company>ENSICAEN</Company>
+    <Product>WSCT</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WSCT.Fake.Core\WSCT.Fake.Core.csproj" />
+    <ProjectReference Include="..\WSCT.Fake.JavaCard\WSCT.Fake.JavaCard.csproj" />
+  </ItemGroup>
+
+</Project>

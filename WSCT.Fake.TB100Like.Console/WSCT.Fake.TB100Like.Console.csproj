@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>WSCT.Fake.ConsoleTests</RootNamespace>
+    <Authors>Sylvain Vernois</Authors>
+    <Company>ENSICAEN</Company>
+    <Product>WSCT</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WSCT.Fake.TB100Like\WSCT.Fake.TB100Like.csproj" />
+  </ItemGroup>
+
+</Project>
