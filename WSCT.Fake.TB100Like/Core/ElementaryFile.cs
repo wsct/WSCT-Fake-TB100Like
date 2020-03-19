@@ -1,6 +1,6 @@
 ﻿using WSCT.Fake.JavaCard;
 
-namespace WSCT.Fake.TB100Like
+namespace WSCT.Fake.TB100Like.Core
 {
     /// <summary>
     /// Elementary File implementation inspired by TB100.
@@ -89,7 +89,7 @@ namespace WSCT.Fake.TB100Like
                 return searchResult;
             }
 
-            return (short)(searchResult - (GetInMemoryOffset((short)0) >> 2));
+            return (short)(searchResult - (GetInMemoryOffset(0) >> 2));
         }
 
         /// <summary>

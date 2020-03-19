@@ -4,7 +4,7 @@ using WSCT.Fake.JavaCard;
 using WSCT.ISO7816;
 using WSCT.Wrapper;
 
-namespace WSCT.Fake.TB100Like
+namespace WSCT.Fake.TB100Like.Core
 {
     /// <summary>
     /// Very light implementation of a javacard runtime environment allowing to mimic the behaviour of a T=0 only TB100 smart card.
@@ -69,7 +69,7 @@ namespace WSCT.Fake.TB100Like
                 return FakeCardFeedback.FromSuccess(isoException.StatusWord);
             }
 
-            if (response.RApdu.Udr.Length == 2)
+            if (response.RApdu.Udr.Length == 0 || cApdu.IsCc2)
             {
                 return response;
             }

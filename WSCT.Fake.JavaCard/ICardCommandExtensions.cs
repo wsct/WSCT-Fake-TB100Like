@@ -47,11 +47,6 @@ namespace WSCT.Fake.JavaCard
         {
             var cApdu = (CommandAPDU)command;
 
-            if (!cApdu.HasLe)
-            {
-                ISOException.ThrowIt(ISO7816.SW_WRONG_LENGTH);
-            }
-
             return (short)cApdu.Le;
         }
 

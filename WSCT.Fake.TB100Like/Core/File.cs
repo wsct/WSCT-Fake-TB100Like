@@ -1,6 +1,6 @@
 ﻿using WSCT.Fake.JavaCard;
 
-namespace WSCT.Fake.TB100Like
+namespace WSCT.Fake.TB100Like.Core
 {
     internal abstract class File
     {
@@ -38,7 +38,7 @@ namespace WSCT.Fake.TB100Like
         /// <returns>FID of the file.</returns>
         public short GetFileId()
         {
-            short inMemoryOffset = GetInMemoryOffset((short)(-_headerLength));
+            short inMemoryOffset = GetInMemoryOffset((short)-_headerLength);
             return Util.GetShort(_fileSystem.memory, inMemoryOffset);
         }
 
@@ -87,7 +87,7 @@ namespace WSCT.Fake.TB100Like
         /// <param name="offset">Offset in previous buffer where to write the header.</param>
         public void GetHeader(byte[] output, short offset)
         {
-            _fileSystem.Read(GetInMemoryOffset((short)(-_headerLength)), output, offset, _headerLength, false);
+            _fileSystem.Read(GetInMemoryOffset((short)-_headerLength), output, offset, _headerLength, false);
         }
 
         /// <summary>
@@ -122,8 +122,7 @@ namespace WSCT.Fake.TB100Like
         /// <param name="header">Buffer containing the header of the file (header should be 32 bits aligned).</param>
         /// <param name="headerOffset">Offset of the header in previous buffer (BYTES).</param>
         /// <param name="headerLength">Length of the header (BYTES, should be a multiple of 4).</param>
-        public void Setup(DedicatedFile parentDF, short offset, short size, byte[] header, short headerOffset,
-                            short headerLength)
+        public void Setup(DedicatedFile parentDF, short offset, short size, byte[] header, short headerOffset, short headerLength)
         {
             _parentDF = parentDF;
             _inParentBodyOffset = (short)(offset << 2);

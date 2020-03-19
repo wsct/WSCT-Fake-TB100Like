@@ -1,13 +1,13 @@
 ﻿using WSCT.Fake.JavaCard;
 
-namespace WSCT.Fake.TB100Like
+namespace WSCT.Fake.TB100Like.Core
 {
     public class HeaderParser
     {
-        public const byte FILETYPE_UNKNOWN = (byte)0xFF;
-        public const byte FILETYPE_DF = (byte)0x3D;
-        public const byte FILETYPE_EFWZ = (byte)0x2D;
-        public const byte FILETYPE_EFSZ = (byte)0x0C;
+        public const byte FILETYPE_UNKNOWN = 0xFF;
+        public const byte FILETYPE_DF = 0x3D;
+        public const byte FILETYPE_EFWZ = 0x2D;
+        public const byte FILETYPE_EFSZ = 0x0C;
 
         /**
          * File type: one of <c>Constants.FILETYPE_*</>.

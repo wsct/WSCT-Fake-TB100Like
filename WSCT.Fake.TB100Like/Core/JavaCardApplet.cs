@@ -3,7 +3,7 @@ using WSCT.Fake.Core;
 using WSCT.Fake.JavaCard;
 using WSCT.ISO7816;
 
-namespace WSCT.Fake.TB100Like
+namespace WSCT.Fake.TB100Like.Core
 {
     /// <summary>
     /// This <see cref="IFakeCard"/> implementation is an almost 1 to 1 port of the javacard TB100 applet from https://github.com/wsct/ENSICAEN-Card-Applet/commit/f20e5659b6a6b5003de4feec2084bb545fc522c2 .<br/>
@@ -22,11 +22,18 @@ namespace WSCT.Fake.TB100Like
         public JavaCardApplet()
         {
             _masterFile = new DedicatedFile(new FileSystem(Constants.FILESYSTEM_SIZE, Constants.DF_MAX, Constants.EF_MAX));
-            _masterFile.Setup(null, (short)0, Constants.FILESYSTEM_SIZE, Constants.MF_HEADER, (short)0, (short)Constants.MF_HEADER.Length);
+            _masterFile.Setup(null, 0, Constants.FILESYSTEM_SIZE, Constants.MF_HEADER, 0, (short)Constants.MF_HEADER.Length);
 
             _headerParser = new HeaderParser();
             _currentDF = _masterFile;
             _currentEF = null;
+
+            // Initialize structure for TB100
+            _masterFile.CreateElementaryFile(0x0000, 0x0006, new byte[] { 0x17, 0xFF, 0x06, 0xE4 }, 0x0000, 0x0004);
+            _masterFile.CreateElementaryFile(0x0006, 0x0005, new byte[] { 0x1F, 0x6C, 0x05, 0x70 }, 0x0000, 0x0004);
+            _masterFile.CreateElementaryFile(0x000B, 0x0005, new byte[] { 0x0E, 0x2F, 0xF5, 0xCE }, 0x0000, 0x0004);
+            _masterFile.CreateElementaryFile(0x0010, 0x0003, new byte[] { 0x0E, 0x10, 0x03, 0xDF }, 0x0000, 0x0004);
+            _masterFile.CreateDedicatedFile(0x0013, 0x0022, new byte[] { 0x7F, 0x00, 0x00, 0x22, 0xFF, 0xFF, 0xFE, 0x62 }, 0x0000, 0x0008);
         }
 
         private readonly byte[] atr = DefaultAtr;
@@ -159,7 +166,7 @@ namespace WSCT.Fake.TB100Like
                 ISOException.ThrowIt(JavaCard.ISO7816.SW_DATA_INVALID);
             }
 
-            return apdu.SetOutgoingAndSend((short)0, (short)0);
+            return apdu.SetOutgoingAndSend(0, 0);
         }
 
         /// <summary>
@@ -195,7 +202,7 @@ namespace WSCT.Fake.TB100Like
                 _currentEF = null;
             }
 
-            return apdu.SetOutgoingAndSend((short)0, (short)0);
+            return apdu.SetOutgoingAndSend(0, 0);
         }
 
         /// <summary>
@@ -263,7 +270,7 @@ namespace WSCT.Fake.TB100Like
 
             // get le
             short le = apdu.SetOutgoing(); // in BYTES
-            if (le != 4)
+            if (le != 0)
             {
                 ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
@@ -275,7 +282,7 @@ namespace WSCT.Fake.TB100Like
             if (_currentEF != null)
             {
                 wordCount = (short)(_currentEF.GetLength() - _currentEF.GetHeaderSize());
-                while (!(_currentEF.IsAvailable(offsetFound, (short)1) || offsetFound == wordCount))
+                while (!(_currentEF.IsAvailable(offsetFound, 1) || offsetFound == wordCount))
                 {
                     offsetFound++;
                 }
@@ -311,12 +318,12 @@ namespace WSCT.Fake.TB100Like
                 ISOException.ThrowIt(Constants.SW_DATA_NOT_FOUND);
             }
             // copy answer in buffer
-            Util.SetShort(buffer, (short)0, offsetFound);
-            Util.SetShort(buffer, (short)2, wordCount);
-            Util.ArrayFillNonAtomic(buffer, (short)4, 4, 0x00);
+            Util.SetShort(buffer, 0, offsetFound);
+            Util.SetShort(buffer, 2, wordCount);
+            Util.ArrayFillNonAtomic(buffer, 4, 4, 0x00);
 
             // and send it!
-            return apdu.SetOutgoingAndSend((short)0, (short)8);
+            return apdu.SetOutgoingAndSend(0, 8);
         }
 
         /// <summary>
@@ -343,7 +350,7 @@ namespace WSCT.Fake.TB100Like
             var rndGen = new RNGCryptoServiceProvider();
             rndGen.GetBytes(apduBuffer, 0, 8);
             // and send it!
-            return apdu.SetOutgoingAndSend((short)0, (short)8);
+            return apdu.SetOutgoingAndSend(0, 8);
         }
 
         /// <summary>
@@ -373,10 +380,10 @@ namespace WSCT.Fake.TB100Like
 
                 VerifyOutOfFile(offset, wordCount);
 
-                byte[] header = JCSystem.MakeTransientByteArray((short)8, JCSystem.CLEAR_ON_DESELECT);
-                _currentEF.GetHeader(header, (short)0);
-                _headerParser.Parse(header, (short)0, (short)8);
-                _currentEF.Read(offset, buffer, (short)0, wordCount, _headerParser.fileType == HeaderParser.FILETYPE_EFSZ);
+                byte[] header = JCSystem.MakeTransientByteArray(8, JCSystem.CLEAR_ON_DESELECT);
+                _currentEF.GetHeader(header, 0);
+                _headerParser.Parse(header, 0, 8);
+                _currentEF.Read(offset, buffer, 0, wordCount, _headerParser.fileType == HeaderParser.FILETYPE_EFSZ);
 
             }
             else
@@ -389,14 +396,14 @@ namespace WSCT.Fake.TB100Like
                 while (fileChild != null && offset < le)
                 {
                     fileChild.GetHeader(buffer, offset);
-                    offset += fileChild.GetHeaderSize();
+                    offset += (short)(fileChild.GetHeaderSize() << 2);
                     fileChild = _currentDF.GetChild(++currentChildNumber);
                 }
             }
 
             // and send data!
             apdu.SetOutgoingLength(le);
-            return apdu.SendBytesLong(buffer, (short)0, le);
+            return apdu.SendBytesLong(buffer, 0, le);
         }
 
         /// <summary>
@@ -436,7 +443,7 @@ namespace WSCT.Fake.TB100Like
             short fid = Util.GetShort(buffer, udcOffset);
 
             File file;
-            if (fid == (short)0x3F00)
+            if (fid == 0x3F00)
             {
                 file = _masterFile;
             }
@@ -463,13 +470,13 @@ namespace WSCT.Fake.TB100Like
 
             // Build and send R-APDU
             short headerSize = file.GetHeaderSize();
-            Util.SetShort(buffer, (short)0, (short)(file._inParentBodyOffset >> 2));
-            Util.SetShort(buffer, (short)2, (short)((file.GetLength() - headerSize)));
-            file.GetHeader(buffer, (short)4);
+            Util.SetShort(buffer, 0, (short)(file._inParentBodyOffset >> 2));
+            Util.SetShort(buffer, 2, (short)(file.GetLength() - headerSize));
+            file.GetHeader(buffer, 4);
 
             // TODO Automagically adds 9000
 
-            return apdu.SetOutgoingAndSend((short)0, (short)(4 + (headerSize << 2)));
+            return apdu.SetOutgoingAndSend(0, (short)(4 + (headerSize << 2)));
         }
 
         /// <summary>
@@ -511,17 +518,17 @@ namespace WSCT.Fake.TB100Like
             // copy data in a buffer
             byte[] buffer = JCSystem.MakeTransientByteArray((short)(wordCount * 4), JCSystem.CLEAR_ON_DESELECT);
             short udcOffset = APDUHelpers.GetOffsetCdata(apdu);
-            Util.ArrayCopyNonAtomic(apduBuffer, udcOffset, buffer, (short)0, length);
+            Util.ArrayCopyNonAtomic(apduBuffer, udcOffset, buffer, 0, length);
 
             // complete words with FF in buffer
             short iMax = (short)(wordCount * 4);
             for (short i = length; i < iMax; i++)
             {
-                buffer[i] = (byte)0xFF;
+                buffer[i] = 0xFF;
             }
 
             // and write data to file
-            _currentEF.Write(buffer, (short)0, offset, wordCount);
+            _currentEF.Write(buffer, 0, offset, wordCount);
 
             return FakeCardFeedback.FromSuccess(unchecked((short)0x9000));
         }

@@ -1,4 +1,4 @@
-﻿namespace WSCT.Fake.TB100Like
+﻿namespace WSCT.Fake.TB100Like.Core
 {
     internal class Constants
     {

@@ -1,6 +1,6 @@
 ﻿using WSCT.Fake.JavaCard;
 
-namespace WSCT.Fake.TB100Like
+namespace WSCT.Fake.TB100Like.Core
 {
     internal class FileSystem
     {
@@ -28,7 +28,7 @@ namespace WSCT.Fake.TB100Like
             // Allocation of data memory
             memory = new byte[(short)(size << 2)];
             attributes = new byte[size];
-            Erase((short)0, (short)(size << 2));
+            Erase(0, (short)(size << 2));
 
             // Allocation of DF files structures
             dedicatedFiles = new DedicatedFile[_dfMax];
@@ -76,7 +76,7 @@ namespace WSCT.Fake.TB100Like
             {
                 index++;
             }
-            return (index == _dfMax ? null : dedicatedFiles[index]);
+            return index == _dfMax ? null : dedicatedFiles[index];
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace WSCT.Fake.TB100Like
             {
                 index++;
             }
-            return (index == _efMax ? null : elementaryFiles[index]);
+            return index == _efMax ? null : elementaryFiles[index];
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace WSCT.Fake.TB100Like
                 short x = GetWrittenLength((short)(index / 4), (short)((short)(index + valueLength - 1) / 4));
                 if (x == valueLengthInWords)
                 {
-                    compareResult = Util.ArrayCompare(value, valueOffset, memory, (short)index, valueLength);
+                    compareResult = Util.ArrayCompare(value, valueOffset, memory, index, valueLength);
                 }
                 index += 4;
             } while (index < lengthInBytes && compareResult != 0);
@@ -210,7 +210,7 @@ namespace WSCT.Fake.TB100Like
             }
             else
             {
-                return (short)-1;
+                return -1;
             }
         }
 

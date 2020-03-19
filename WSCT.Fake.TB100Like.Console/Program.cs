@@ -3,7 +3,7 @@ using System.Linq;
 using WSCT.Core;
 using WSCT.Core.APDU;
 using WSCT.Fake.Core;
-using WSCT.Fake.TB100Like;
+using WSCT.Fake.TB100Like.Core;
 using WSCT.Helpers;
 using WSCT.ISO7816;
 using WSCT.ISO7816.Commands;
