@@ -59,9 +59,17 @@ namespace WSCT.Fake.TB100Like.Core
         /// <returns>offset + length.</returns>
         public short Read(short offset, byte[] output, short outputOffset, short length, bool secureRead)
         {
-            _fileSystem.Read(GetInMemoryOffset((short)(offset << 2)), output, outputOffset, (short)(length << 2), secureRead);
+            short readableLength;
+            if (length > (short)(_length - (_headerLength >> 2) - offset))
+            {
+                readableLength = (short)(_length - (_headerLength >> 2) - offset);
+            }
+            else
+            {
+                readableLength = length;
+            }
 
-            return (short)(offset + length);
+            return (short)(_fileSystem.Read(GetInMemoryOffset((short)(offset << 2)), output, outputOffset, (short)(readableLength << 2), secureRead) >> 2);
         }
 
         /// <summary>

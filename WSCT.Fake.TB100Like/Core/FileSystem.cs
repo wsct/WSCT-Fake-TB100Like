@@ -170,7 +170,7 @@ namespace WSCT.Fake.TB100Like.Core
                 outputOffset += freeLength;
             }
 
-            return (short)(outputOffset + length);
+            return outputOffset;
         }
 
         /// <summary>

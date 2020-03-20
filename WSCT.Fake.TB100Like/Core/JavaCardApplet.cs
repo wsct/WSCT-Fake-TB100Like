@@ -34,6 +34,10 @@ namespace WSCT.Fake.TB100Like.Core
             _masterFile.CreateElementaryFile(0x000B, 0x0005, new byte[] { 0x0E, 0x2F, 0xF5, 0xCE }, 0x0000, 0x0004);
             _masterFile.CreateElementaryFile(0x0010, 0x0003, new byte[] { 0x0E, 0x10, 0x03, 0xDF }, 0x0000, 0x0004);
             _masterFile.CreateDedicatedFile(0x0013, 0x0022, new byte[] { 0x7F, 0x00, 0x00, 0x22, 0xFF, 0xFF, 0xFE, 0x62 }, 0x0000, 0x0008);
+            ElementaryFile ef0E2F = (ElementaryFile)_masterFile.FindFileByFileId(0x0E2F);
+            ef0E2F.Write(new byte[] { 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30 }, 0, 0x0002, 2);
+            ElementaryFile ef0E10 = (ElementaryFile)_masterFile.FindFileByFileId(0x0E10);
+            ef0E10.Write(new byte[] { 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30 }, 0, 0x0000, 2);
         }
 
         private readonly byte[] atr = DefaultAtr;
@@ -364,12 +368,10 @@ namespace WSCT.Fake.TB100Like.Core
                 // an EF is selected ==> read binary
                 offset = Util.GetShort(apdu.GetBuffer(), JavaCard.ISO7816.OFFSET_P1); // in WORDS
 
-                VerifyOutOfFile(offset, wordCount);
-
                 byte[] header = JCSystem.MakeTransientByteArray(8, JCSystem.CLEAR_ON_DESELECT);
                 _currentEF.GetHeader(header, 0);
                 _headerParser.Parse(header, 0, 8);
-                _currentEF.Read(offset, buffer, 0, wordCount, _headerParser.fileType == HeaderParser.FILETYPE_EFSZ);
+                offset += (short)(_currentEF.Read(offset, buffer, 0, wordCount, _headerParser.fileType == HeaderParser.FILETYPE_EFSZ) << 2);
 
             }
             else
