@@ -357,11 +357,12 @@ namespace WSCT.Fake.TB100Like.Core
             short le = apdu.SetOutgoing(); // in BYTES
             short wordCount = (short)((short)(le + 3) / 4);
             byte[] buffer = JCSystem.MakeTransientByteArray((short)(wordCount * 4), JCSystem.CLEAR_ON_DESELECT);
+            short offset;
 
             if (_currentEF != null)
             {
                 // an EF is selected ==> read binary
-                short offset = Util.GetShort(apdu.GetBuffer(), JavaCard.ISO7816.OFFSET_P1); // in WORDS
+                offset = Util.GetShort(apdu.GetBuffer(), JavaCard.ISO7816.OFFSET_P1); // in WORDS
 
                 VerifyOutOfFile(offset, wordCount);
 
@@ -374,7 +375,7 @@ namespace WSCT.Fake.TB100Like.Core
             else
             {
                 // no EF selected ==> DIR
-                short offset = 0;
+                offset = 0;
                 byte currentChildNumber = 0;
                 File fileChild = _currentDF.GetChild(currentChildNumber);
                 // get header of each file in current DF
@@ -385,6 +386,9 @@ namespace WSCT.Fake.TB100Like.Core
                     fileChild = _currentDF.GetChild(++currentChildNumber);
                 }
             }
+
+            // Pad with FF
+            Util.ArrayFillNonAtomic(buffer, offset, (short)(le - offset), (byte)MemoryState.Free);
 
             // and send data!
             apdu.SetOutgoingLength(le);

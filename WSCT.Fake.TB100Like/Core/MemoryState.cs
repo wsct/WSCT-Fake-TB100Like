@@ -2,7 +2,7 @@
 {
     internal enum MemoryState : byte
     {
-        Free = 0x00,
-        Written = 0x80
+        Free = 0xFF,
+        Written = 0x00
     }
 }
