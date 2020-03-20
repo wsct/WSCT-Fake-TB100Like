@@ -22,8 +22,9 @@
         {
             for (byte i = 0; i < _childrenCount; i++)
             {
-                if (localWordOffset < (short)(_children[i].GetOffset() + _children[i].GetLength())
-                    || (short)(localWordOffset + length) > _children[i].GetOffset())
+                bool neverOverlap = localWordOffset > (short)((short)(_children[i].GetOffset() >> 2) + _children[i].GetLength() - 1)
+                                      || localWordOffset + length - 1 < (short)(_children[i].GetOffset() >> 2);
+                if (!neverOverlap)
                 {
                     return false;
                 }

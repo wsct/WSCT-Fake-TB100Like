@@ -89,19 +89,20 @@ namespace WSCT.Fake.TB100Like.Core
 
         public bool Unpower()
         {
-            if (_isActive)
+            if (!_isActive)
             {
-                _isActive = false;
-
-                return true;
+                return false;
             }
 
-            return false;
+            _isActive = false;
+
+            return true;
+
         }
 
         public bool WarmReset()
         {
-            return !_isActive ? false : true;
+            return _isActive;
         }
 
         #endregion
@@ -290,25 +291,9 @@ namespace WSCT.Fake.TB100Like.Core
             else
             {
                 wordCount = (short)(_currentDF.GetLength() - _currentDF.GetHeaderSize());
-
-                byte childCount = _currentDF.GetChildCount();
-                if (childCount > 0)
+                while (!(_currentDF.IsAvailable(offsetFound, 1) || offsetFound == wordCount))
                 {
-                    byte iChild = 0;
-                    short begin;
-                    short end;
-                    do
-                    {
-                        File currentFile = _currentDF.GetChild(iChild);
-                        begin = (short)(currentFile._inParentBodyOffset << 2);
-                        end = (short)(begin + currentFile._length);
-
-                        if (offsetFound >= begin)
-                        {
-                            offsetFound = end;
-                        }
-                        iChild++;
-                    } while (iChild < childCount && offsetFound > begin);
+                    offsetFound++;
                 }
             }
 

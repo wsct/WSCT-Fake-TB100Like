@@ -61,7 +61,7 @@ namespace WSCT.Fake.TB100Like.Core
         }
 
         /// <summary>
-        /// Informs if the memory from <paramref name="localWordOffset"/> and <paramref name="length"/> following bytes are free.
+        /// Informs if the memory from <paramref name="localWordOffset"/> and <paramref name="length"/> following words are free.
         /// </summary>
         /// <param name="localWordOffset">Offset of the first word to be tested (WORDS)</param>
         /// <param name="length">Number of words to be tested (WORDS)</param>
