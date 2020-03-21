@@ -38,6 +38,8 @@ namespace WSCT.Fake.TB100Like.Core
             ef0E2F.Write(new byte[] { 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30 }, 0, 0x0002, 2);
             ElementaryFile ef0E10 = (ElementaryFile)_masterFile.FindFileByFileId(0x0E10);
             ef0E10.Write(new byte[] { 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30 }, 0, 0x0000, 2);
+            DedicatedFile df7F00 = (DedicatedFile)_masterFile.FindFileByFileId(0x7F00);
+            df7F00.CreateElementaryFile(0x0000, 0x0010, new byte[] { 0x6F, 0x01, 0x00, 0x10, 0xFF, 0xFF, 0xFF, 0x83 }, 0, 0x0008);
         }
 
         private readonly byte[] atr = DefaultAtr;
