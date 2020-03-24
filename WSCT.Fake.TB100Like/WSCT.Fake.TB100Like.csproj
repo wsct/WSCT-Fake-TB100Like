@@ -1,16 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
     <RootNamespace>WSCT.Fake.TB100Like</RootNamespace>
     <Authors>Sylvain Vernois</Authors>
     <Company>ENSICAEN</Company>
     <Product>WSCT</Product>
+    <Description>C# Implementation of our [javavard applet](https://github.com/wsct/ENSICAEN-Card-Applet), made available as a fake smartcard.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WSCT.Fake.Core\WSCT.Fake.Core.csproj" />
     <ProjectReference Include="..\WSCT.Fake.JavaCard\WSCT.Fake.JavaCard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="WSCT.Fake.TB100Like.applet.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

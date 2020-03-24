@@ -135,7 +135,7 @@ namespace WSCT.Fake.ConsoleTests
         {
             PrintHeader($"FSEARCH @{offset:X4}");
 
-            var cApdu = new CommandAPDU($"00A0{offset:X4}04");
+            var cApdu = new CommandAPDU($"00A0{offset:X4}00");
 
             ExecuteCrp(cApdu);
         }
