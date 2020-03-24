@@ -311,7 +311,7 @@ namespace WSCT.Fake.TB100Like.Core
             // copy answer in buffer
             Util.SetShort(buffer, 0, offsetFound);
             Util.SetShort(buffer, 2, wordCount);
-            Util.ArrayFillNonAtomic(buffer, 4, 4, 0x00);
+            Util.ArrayFillNonAtomic(buffer, 4, 4, (byte)MemoryState.Free);
 
             // and send it!
             return apdu.SetOutgoingAndSend(0, 8);
