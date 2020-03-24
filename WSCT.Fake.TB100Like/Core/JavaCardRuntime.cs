@@ -104,7 +104,7 @@ namespace WSCT.Fake.TB100Like.Core
             var responseBytes = new byte[le + 2];
 
             var lengthToCopy = Math.Min(le, _udrWaitingToBeRetrieved.Length);
-            var lengthToFillWithFF = Math.Max(le, _udrWaitingToBeRetrieved.Length) - lengthToCopy;
+            var lengthToFillWithFF = Math.Max(le, lengthToCopy) - lengthToCopy;
 
             Util.ArrayCopyNonAtomic(_udrWaitingToBeRetrieved, 0, responseBytes, 0, (short)lengthToCopy);
 
