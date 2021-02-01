@@ -1,7 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+    <Version>1.1.0</Version>
+    <PackageId>WSCT.Fake.JavaCard</PackageId>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
     <Authors>Sylvain Vernois</Authors>
     <Company>ENSICAEN</Company>
     <Product>WSCT</Product>
