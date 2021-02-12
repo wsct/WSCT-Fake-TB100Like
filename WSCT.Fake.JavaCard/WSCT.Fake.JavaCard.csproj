@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <PackageId>WSCT.Fake.JavaCard</PackageId>
 
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -10,7 +10,14 @@
     <Authors>Sylvain Vernois</Authors>
     <Company>ENSICAEN</Company>
     <Product>WSCT</Product>
+    
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.9" />
+    <PackageReference Include="WSCT.Helpers" Version="5.0.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\WSCT.Fake.Core\WSCT.Fake.Core.csproj" />

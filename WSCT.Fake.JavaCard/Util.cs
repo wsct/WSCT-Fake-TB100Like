@@ -66,6 +66,19 @@ namespace WSCT.Fake.JavaCard
         }
 
         /// <summary>
+        /// Copies an array from the specified source array, beginning at the specified position, to the specified position of the destination array (atomicity is not honored by this implementation).
+        /// </summary>
+        /// <param name="source">Source byte array.</param>
+        /// <param name="sourceOffset">Offset within source byte array to start copy from.</param>
+        /// <param name="output">Destination byte array.</param>
+        /// <param name="outputOffset">Offset within destination byte array to start copy into.</param>
+        /// <param name="writtenLength">Byte length to be copied</param>
+        public static void ArrayCopy(byte[] source, short sourceOffset, byte[] output, short outputOffset, short writtenLength)
+        {
+            Array.Copy(source, sourceOffset, output, outputOffset, writtenLength);
+        }
+
+        /// <summary>
         /// Concatenates the two parameter bytes to form a short value.
         /// </summary>
         /// <param name="b1">first byte (high order byte).</param>
