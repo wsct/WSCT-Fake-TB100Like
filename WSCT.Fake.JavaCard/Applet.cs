@@ -2,14 +2,16 @@
 {
     public abstract class Applet
     {
-        public abstract void Process(APDU apdu);
+        public abstract void process(APDU apdu);
 
-        public virtual bool Select()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public virtual bool select()
         {
             return false;
         }
 
-        public virtual void Deselect()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public virtual void deselect()
         {
         }
 
@@ -19,9 +21,11 @@
         /// <param name="bArray"></param>
         /// <param name="bOffset"></param>
         /// <param name="bLength"></param>
-        public abstract void Install(byte[] bArray, short bOffset, byte bLength);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void install(byte[] bArray, short bOffset, byte bLength);
 
-        protected void Register(byte[] _1 /* bArray*/, short _2 /*bOffset*/, byte _3 /*bLength*/)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        protected void register(byte[] _1 /* bArray*/, short _2 /*bOffset*/, byte _3 /*bLength*/)
         {
             // TODO ?
         }

@@ -39,7 +39,7 @@ namespace WSCT.Fake.TB100Like.Core
         public short GetFileId()
         {
             short inMemoryOffset = GetInMemoryOffset((short)-_headerLength);
-            return Util.GetShort(_fileSystem.memory, inMemoryOffset);
+            return Util.getShort(_fileSystem.memory, inMemoryOffset);
         }
 
         /// <summary>

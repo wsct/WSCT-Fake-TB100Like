@@ -18,17 +18,17 @@ namespace WSCT.Fake.JavaCard.Security
 
         #region >> MessageDigest
 
-        public override void DoFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
+        public override void doFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
         {
             _hash.ComputeHash(inBuffer, inOffset, inLength);
-            Util.ArrayCopyNonAtomic(_hash.Hash, 0, outBuffer, outOffset, (short)(_hash.HashSize / 8));
+            Util.arrayCopyNonAtomic(_hash.Hash, 0, outBuffer, outOffset, (short)(_hash.HashSize / 8));
         }
 
-        public override byte GetAlgorithm() => _algorithm;
+        public override byte getAlgorithm() => _algorithm;
 
-        public override byte GetLength() => (byte)_hash.HashSize;
+        public override byte getLength() => (byte)_hash.HashSize;
 
-        public override void Reset() => _hash.Initialize();
+        public override void reset() => _hash.Initialize();
 
         #endregion
     }

@@ -42,7 +42,8 @@ namespace WSCT.Fake.JavaCard.Security
 
         public const byte MODE_ENCRYPT = 2;
 
-        public static Cipher GetInstance(byte algorithm, bool externalAccess)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static Cipher getInstance(byte algorithm, bool externalAccess)
         {
             switch (algorithm)
             {
@@ -55,10 +56,13 @@ namespace WSCT.Fake.JavaCard.Security
             }
         }
 
-        public abstract byte GetAlgorithm();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract byte getAlgorithm();
 
-        public abstract void Init(Key key, byte mode);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void init(Key key, byte mode);
 
-        public abstract void DoFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void doFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset);
     }
 }

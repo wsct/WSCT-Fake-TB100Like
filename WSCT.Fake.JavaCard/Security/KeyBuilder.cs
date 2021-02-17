@@ -112,17 +112,15 @@ namespace WSCT.Fake.JavaCard.Security
 
         #endregion
 
-        public static Key BuildKey(byte keyType, short keyLength, bool keyEncryption)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static Key buildKey(byte keyType, short keyLength, bool keyEncryption)
         {
-            switch (keyType)
+            return keyType switch
             {
-                case TYPE_RSA_PRIVATE:
-                    return new RSAPrivateKey(keyType, (short)(keyLength / 8), keyEncryption);
-                case TYPE_DES:
-                    return new DESKey(keyType, 128, keyEncryption);
-                default:
-                    throw new ISOException(ISO7816.SW_UNKNOWN);
-            }
+                TYPE_RSA_PRIVATE => new RSAPrivateKey(keyType, (short)(keyLength / 8), keyEncryption),
+                TYPE_DES => new DESKey(keyType, 128, keyEncryption),
+                _ => throw new ISOException(ISO7816.SW_UNKNOWN),
+            };
         }
     }
 }

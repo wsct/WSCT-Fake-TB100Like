@@ -48,7 +48,7 @@ namespace WSCT.Fake.TB100Like.Core
                 }
                 fileType = FILETYPE_DF;
                 headerLength = 8;
-                bodyLength = (short)(Util.GetShort(buffer, (short)(offset + 2)) - 2);
+                bodyLength = (short)(Util.getShort(buffer, (short)(offset + 2)) - 2);
             }
             else if ((qualifier & FILETYPE_EFWZ) == FILETYPE_EFWZ)
             {
@@ -58,7 +58,7 @@ namespace WSCT.Fake.TB100Like.Core
                 }
                 fileType = FILETYPE_EFWZ;
                 headerLength = 8;
-                bodyLength = (short)(Util.GetShort(buffer, (short)(offset + 2)) - 2);
+                bodyLength = (short)(Util.getShort(buffer, (short)(offset + 2)) - 2);
             }
             else if ((qualifier & FILETYPE_EFSZ) == FILETYPE_EFSZ)
             {
@@ -75,7 +75,7 @@ namespace WSCT.Fake.TB100Like.Core
                 return false;
             }
 
-            fileIdentifier = Util.GetShort(buffer, offset);
+            fileIdentifier = Util.getShort(buffer, offset);
 
             return true;
         }

@@ -9,7 +9,7 @@ namespace WSCT.Fake.TB100Like.Core
     /// <summary>
     /// Very light implementation of a javacard runtime environment allowing to mimic the behaviour of a T=0 only TB100 smart card.
     /// </summary>
-    public class JavaCardRuntime : IFakeCard
+    public class JavaCardT0ForTB100Adapter : IFakeCard
     {
         private readonly IFakeCard _fakeCard;
         private byte[] _udrWaitingToBeRetrieved;
@@ -19,7 +19,7 @@ namespace WSCT.Fake.TB100Like.Core
         /// Creates a new instance wrapping an existing <see cref="IFakeCard"/> implementation.<br/>
         /// </summary>
         /// <param name="fakeCard">Existing <see cref="IFakeCard"/> implementation, notably an APDU level implementation.</param>
-        public JavaCardRuntime(IFakeCard fakeCard)
+        public JavaCardT0ForTB100Adapter(IFakeCard fakeCard)
         {
             _fakeCard = fakeCard;
         }
@@ -106,11 +106,11 @@ namespace WSCT.Fake.TB100Like.Core
             var lengthToCopy = Math.Min(le, _udrWaitingToBeRetrieved.Length);
             var lengthToFillWithFF = Math.Max(le, lengthToCopy) - lengthToCopy;
 
-            Util.ArrayCopyNonAtomic(_udrWaitingToBeRetrieved, 0, responseBytes, 0, (short)lengthToCopy);
+            Util.arrayCopyNonAtomic(_udrWaitingToBeRetrieved, 0, responseBytes, 0, (short)lengthToCopy);
 
-            Util.ArrayFillNonAtomic(responseBytes, (short)lengthToCopy, (short)lengthToFillWithFF, 0xFF);
+            Util.arrayFillNonAtomic(responseBytes, (short)lengthToCopy, (short)lengthToFillWithFF, 0xFF);
 
-            Util.SetShort(responseBytes, le, unchecked((short)0x9000));
+            Util.setShort(responseBytes, le, unchecked((short)0x9000));
 
             return responseBytes;
         }

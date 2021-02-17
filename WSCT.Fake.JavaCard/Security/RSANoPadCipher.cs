@@ -23,17 +23,17 @@ namespace WSCT.Fake.JavaCard.Security
 
         #region >> Cipher
 
-        public override void DoFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
+        public override void doFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
         {
             var data = new Span<byte>(inBuffer, inOffset, inLength).ToArray();
             var encrypted = rsa.ProcessBlock(data, 0, inLength);
 
-            Util.ArrayCopyNonAtomic(encrypted, 0, outBuffer, outOffset, inLength);
+            Util.arrayCopyNonAtomic(encrypted, 0, outBuffer, outOffset, inLength);
         }
 
-        public override byte GetAlgorithm() => _algorithm;
+        public override byte getAlgorithm() => _algorithm;
 
-        public override void Init(Key key, byte mode)
+        public override void init(Key key, byte mode)
         {
             var rsaKey = (RSAPrivateKey)key;
             var rsaParameters = new RsaKeyParameters(true, new BigInteger(rsaKey.Modulus.ToHexa('\0'), 16), new BigInteger(rsaKey.Exponent.ToHexa('\0'), 16));

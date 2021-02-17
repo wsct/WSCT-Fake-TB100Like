@@ -19,17 +19,17 @@ namespace WSCT.Fake.JavaCard.Security
 
         #region >> Cipher
 
-        public override void DoFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
+        public override void doFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
         {
             var result = _transform.TransformFinalBlock(inBuffer, inOffset, inLength);
-            Util.ArrayCopyNonAtomic(result, 0, outBuffer, outOffset, inLength);
+            Util.arrayCopyNonAtomic(result, 0, outBuffer, outOffset, inLength);
         }
 
-        public override byte GetAlgorithm() => _algorithm;
+        public override byte getAlgorithm() => _algorithm;
 
-        public override void Init(Key key, byte mode)
+        public override void init(Key key, byte mode)
         {
-            ((DESKey)key).GetKey(_cipher.Key, 0);
+            ((DESKey)key).getKey(_cipher.Key, 0);
 
             _transform = mode switch
             {

@@ -52,7 +52,7 @@ namespace WSCT.Fake.JavaCard
 
                 var apdu = new APDU(commandApdu);
 
-                _applet.Process(apdu);
+                _applet.process(apdu);
 
                 byte[] responseBytes = apdu.ResponseBuffer.Take(apdu.ResponseLength).ToArray();
 
@@ -105,7 +105,7 @@ namespace WSCT.Fake.JavaCard
             buffer[0] = (byte)aid.Length;
             Array.Copy(aid, 0, buffer, 1, aid.Length);
 
-            _applet.Install(buffer, 0, (byte)buffer.Length);
+            _applet.install(buffer, 0, (byte)buffer.Length);
         }
 
         public void SetAtr(byte[] atr)

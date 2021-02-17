@@ -65,7 +65,7 @@ namespace WSCT.Fake.JavaCard
 
             Array.Copy(buffer, offset, _buffer, 0, _length);
 
-            Util.SetShort(_buffer, bOff: (short)(_offset + _length), unchecked((short)0x9000));
+            Util.setShort(_buffer, bOff: (short)(_offset + _length), unchecked((short)0x9000));
             _length += 2;
 
             var responseBytes = new byte[_length];
@@ -84,7 +84,7 @@ namespace WSCT.Fake.JavaCard
             _offset = offset;
             _length = length;
 
-            Util.SetShort(_buffer, bOff: (short)(_offset + _length), unchecked((short)0x9000));
+            Util.setShort(_buffer, bOff: (short)(_offset + _length), unchecked((short)0x9000));
             _length += 2;
 
             var responseBytes = new byte[_length];

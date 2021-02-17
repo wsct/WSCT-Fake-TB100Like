@@ -21,11 +21,13 @@ namespace WSCT.Fake.JavaCard
             StatusWord = statusWord;
         }
 
+
         /// <summary>
         /// Throws the Java Card runtime environment-owned instance of the ISOException class with the specified status word.
         /// </summary>
         /// <param name="sw">ISO 7816-4 defined status word.</param>
-        public static void ThrowIt(short sw)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static void throwIt(short sw)
         {
             throw new ISOException(sw);
         }

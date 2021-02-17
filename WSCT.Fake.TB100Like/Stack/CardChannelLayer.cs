@@ -19,13 +19,13 @@ namespace WSCT.Fake.TB100Like.Stack
         /// Initializes a new instance.
         /// </summary>
         public CardChannelLayer()
-            : base(new JavaCardRuntime(new JavaCardApplet()))
+            : base(new JavaCardT0ForTB100Adapter(new JavaCardApplet()))
         {
         }
 
         /// <inheritdoc cref="CardChannel(ICardContext,string)"/>
         public CardChannelLayer(ICardContext context, string readerName)
-            : base(context, readerName, new JavaCardRuntime(new JavaCardApplet()))
+            : base(context, readerName, new JavaCardT0ForTB100Adapter(new JavaCardApplet()))
         {
         }
 

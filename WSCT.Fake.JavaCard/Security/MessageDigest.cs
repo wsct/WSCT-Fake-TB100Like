@@ -43,12 +43,16 @@ namespace WSCT.Fake.JavaCard.Security
             }
         }
 
-        public abstract byte GetAlgorithm();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract byte getAlgorithm();
 
-        public abstract byte GetLength();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract byte getLength();
 
-        public abstract void Reset();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void reset();
 
-        public abstract void DoFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void doFinal(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset);
     }
 }

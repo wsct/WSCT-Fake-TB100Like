@@ -136,19 +136,19 @@ namespace WSCT.Fake.TB100Like.Core
             byte[] buffer = apdu.GetBuffer();
             apdu.SetIncomingAndReceive();
 
-            short headerOffset = APDUHelpers.GetOffsetCdata(apdu);
-            short headerLength = APDUHelpers.GetIncomingLength(apdu);
+            short headerOffset = APDUHelpers.getOffsetCdata(apdu);
+            short headerLength = APDUHelpers.getIncomingLength(apdu);
 
             if (headerLength < 4)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_DATA_INVALID);
+                ISOException.throwIt(JavaCard.ISO7816.SW_DATA_INVALID);
             }
 
-            short offset = Util.GetShort(buffer, JavaCard.ISO7816.OFFSET_P1);
+            short offset = Util.getShort(buffer, JavaCard.ISO7816.OFFSET_P1);
 
             if (!_headerParser.Parse(buffer, headerOffset, (short)(headerOffset + headerLength)))
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_DATA_INVALID);
+                ISOException.throwIt(JavaCard.ISO7816.SW_DATA_INVALID);
             }
             short size = (short)(_headerParser.bodyLength + (short)(_headerParser.headerLength >> 2));
 
@@ -164,13 +164,13 @@ namespace WSCT.Fake.TB100Like.Core
                     file = _currentDF.CreateElementaryFile(offset, size, buffer, headerOffset, headerLength);
                     break;
                 default:
-                    ISOException.ThrowIt(JavaCard.ISO7816.SW_CONDITIONS_NOT_SATISFIED);
+                    ISOException.throwIt(JavaCard.ISO7816.SW_CONDITIONS_NOT_SATISFIED);
                     break;
             }
 
             if (file == null)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_DATA_INVALID);
+                ISOException.throwIt(JavaCard.ISO7816.SW_DATA_INVALID);
             }
 
             return apdu.SetOutgoingAndSend(0, 0);
@@ -189,19 +189,19 @@ namespace WSCT.Fake.TB100Like.Core
             byte[] buffer = apdu.GetBuffer();
             _ = apdu.SetIncomingAndReceive();
 
-            short udcOffset = APDUHelpers.GetOffsetCdata(apdu);
-            short lc = APDUHelpers.GetIncomingLength(apdu);
+            short udcOffset = APDUHelpers.getOffsetCdata(apdu);
+            short lc = APDUHelpers.getIncomingLength(apdu);
 
             if (lc != 2)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_P1P2);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_P1P2);
             }
 
-            short fid = Util.GetShort(buffer, udcOffset);
+            short fid = Util.getShort(buffer, udcOffset);
 
             if (_currentDF.DeleteFile(fid) == false)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_FILE_NOT_FOUND);
+                ISOException.throwIt(JavaCard.ISO7816.SW_FILE_NOT_FOUND);
             }
 
             if (_currentEF != null && fid == _currentEF.GetFileId())
@@ -238,15 +238,15 @@ namespace WSCT.Fake.TB100Like.Core
             apdu.SetIncomingAndReceive();
 
             // Check if Lc ==2
-            short lc = APDUHelpers.GetIncomingLength(apdu);
+            short lc = APDUHelpers.getIncomingLength(apdu);
             if (lc != 2)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
 
-            short offset = Util.GetShort(apduBuffer, JavaCard.ISO7816.OFFSET_P1); // in WORDS
-            short udcOffset = APDUHelpers.GetOffsetCdata(apdu);
-            short length = Util.GetShort(apduBuffer, udcOffset); // in WORDS
+            short offset = Util.getShort(apduBuffer, JavaCard.ISO7816.OFFSET_P1); // in WORDS
+            short udcOffset = APDUHelpers.getOffsetCdata(apdu);
+            short length = Util.getShort(apduBuffer, udcOffset); // in WORDS
 
             VerifyOutOfFile(offset, length);
 
@@ -273,13 +273,13 @@ namespace WSCT.Fake.TB100Like.Core
         {
             // get offset
             byte[] buffer = apdu.GetBuffer();
-            short offset = Util.GetShort(buffer, JavaCard.ISO7816.OFFSET_P1); // in WORDS
+            short offset = Util.getShort(buffer, JavaCard.ISO7816.OFFSET_P1); // in WORDS
 
             // get le
             short le = apdu.SetOutgoing(); // in BYTES
             if (le != 0)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
 
             short wordCount;
@@ -306,12 +306,12 @@ namespace WSCT.Fake.TB100Like.Core
             // check that there is still some empty space
             if (offsetFound == wordCount)
             {
-                ISOException.ThrowIt(Constants.SW_DATA_NOT_FOUND);
+                ISOException.throwIt(Constants.SW_DATA_NOT_FOUND);
             }
             // copy answer in buffer
-            Util.SetShort(buffer, 0, offsetFound);
-            Util.SetShort(buffer, 2, wordCount);
-            Util.ArrayFillNonAtomic(buffer, 4, 4, (byte)MemoryState.Free);
+            Util.setShort(buffer, 0, offsetFound);
+            Util.setShort(buffer, 2, wordCount);
+            Util.arrayFillNonAtomic(buffer, 4, 4, (byte)MemoryState.Free);
 
             // and send it!
             return apdu.SetOutgoingAndSend(0, 8);
@@ -334,7 +334,7 @@ namespace WSCT.Fake.TB100Like.Core
             if (le != 8)
             {
                 // if not => error
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
 
             // generate 8 random bytes
@@ -362,15 +362,15 @@ namespace WSCT.Fake.TB100Like.Core
         {
             short le = apdu.SetOutgoing(); // in BYTES
             short wordCount = (short)((short)(le + 3) / 4);
-            byte[] buffer = JCSystem.MakeTransientByteArray((short)(wordCount * 4), JCSystem.CLEAR_ON_DESELECT);
+            byte[] buffer = JCSystem.makeTransientByteArray((short)(wordCount * 4), JCSystem.CLEAR_ON_DESELECT);
             short offset;
 
             if (_currentEF != null)
             {
                 // an EF is selected ==> read binary
-                offset = Util.GetShort(apdu.GetBuffer(), JavaCard.ISO7816.OFFSET_P1); // in WORDS
+                offset = Util.getShort(apdu.GetBuffer(), JavaCard.ISO7816.OFFSET_P1); // in WORDS
 
-                byte[] header = JCSystem.MakeTransientByteArray(8, JCSystem.CLEAR_ON_DESELECT);
+                byte[] header = JCSystem.makeTransientByteArray(8, JCSystem.CLEAR_ON_DESELECT);
                 _currentEF.GetHeader(header, 0);
                 _headerParser.Parse(header, 0, 8);
                 offset += (short)(_currentEF.Read(offset, buffer, 0, wordCount, _headerParser.fileType == HeaderParser.FILETYPE_EFSZ) << 2);
@@ -392,7 +392,7 @@ namespace WSCT.Fake.TB100Like.Core
             }
 
             // Pad with FF
-            Util.ArrayFillNonAtomic(buffer, offset, (short)(le - offset), (byte)MemoryState.Free);
+            Util.arrayFillNonAtomic(buffer, offset, (short)(le - offset), (byte)MemoryState.Free);
 
             // and send data!
             apdu.SetOutgoingLength(le);
@@ -425,15 +425,15 @@ namespace WSCT.Fake.TB100Like.Core
             byte[] buffer = apdu.GetBuffer();
             apdu.SetIncomingAndReceive();
 
-            short udcOffset = APDUHelpers.GetOffsetCdata(apdu);
+            short udcOffset = APDUHelpers.getOffsetCdata(apdu);
             short lc = (short)apdu.Lc;
 
             if (lc != 2)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
 
-            short fid = Util.GetShort(buffer, udcOffset);
+            short fid = Util.getShort(buffer, udcOffset);
 
             File file;
             if (fid == 0x3F00)
@@ -447,7 +447,7 @@ namespace WSCT.Fake.TB100Like.Core
 
             if (file == null)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_FILE_NOT_FOUND);
+                ISOException.throwIt(JavaCard.ISO7816.SW_FILE_NOT_FOUND);
             }
 
             // Update current DF / EF
@@ -463,8 +463,8 @@ namespace WSCT.Fake.TB100Like.Core
 
             // Build and send R-APDU
             short headerSize = file.GetHeaderSize();
-            Util.SetShort(buffer, 0, (short)(file._inParentBodyOffset >> 2));
-            Util.SetShort(buffer, 2, (short)(file.GetLength() - headerSize));
+            Util.setShort(buffer, 0, (short)(file._inParentBodyOffset >> 2));
+            Util.setShort(buffer, 2, (short)(file.GetLength() - headerSize));
             file.GetHeader(buffer, 4);
 
             // TODO Automagically adds 9000
@@ -497,21 +497,21 @@ namespace WSCT.Fake.TB100Like.Core
             byte[] apduBuffer = apdu.GetBuffer();
             apdu.SetIncomingAndReceive();
 
-            short offset = Util.GetShort(apduBuffer, JavaCard.ISO7816.OFFSET_P1); // in WORDS
-            short length = APDUHelpers.GetIncomingLength(apdu); // in BYTES
+            short offset = Util.getShort(apduBuffer, JavaCard.ISO7816.OFFSET_P1); // in WORDS
+            short length = APDUHelpers.getIncomingLength(apdu); // in BYTES
             short wordCount = (short)((short)(length + 3) / 4); // length in WORDS
 
             // availability check
             VerifyOutOfFile(offset, wordCount);
             if (!_currentEF.IsAvailable(offset, wordCount))
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
 
             // copy data in a buffer
-            byte[] buffer = JCSystem.MakeTransientByteArray((short)(wordCount * 4), JCSystem.CLEAR_ON_DESELECT);
-            short udcOffset = APDUHelpers.GetOffsetCdata(apdu);
-            Util.ArrayCopyNonAtomic(apduBuffer, udcOffset, buffer, 0, length);
+            byte[] buffer = JCSystem.makeTransientByteArray((short)(wordCount * 4), JCSystem.CLEAR_ON_DESELECT);
+            short udcOffset = APDUHelpers.getOffsetCdata(apdu);
+            Util.arrayCopyNonAtomic(apduBuffer, udcOffset, buffer, 0, length);
 
             // complete words with FF in buffer
             short iMax = (short)(wordCount * 4);
@@ -531,7 +531,7 @@ namespace WSCT.Fake.TB100Like.Core
             // Check if there is a current EF
             if (_currentEF == null)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_CONDITIONS_NOT_SATISFIED);
+                ISOException.throwIt(JavaCard.ISO7816.SW_CONDITIONS_NOT_SATISFIED);
             }
 
             short bodyLength = (short)(_currentEF.GetLength() - _currentEF.GetHeaderSize()); // in WORDS
@@ -539,13 +539,13 @@ namespace WSCT.Fake.TB100Like.Core
             // check if offset < bodyLength
             if (offset >= bodyLength)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_P1P2);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_P1P2);
             }
 
             // check if offset+length <= bodyLength
             if ((short)(offset + length) > bodyLength)
             {
-                ISOException.ThrowIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
+                ISOException.throwIt(JavaCard.ISO7816.SW_WRONG_LENGTH);
             }
 
         }

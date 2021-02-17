@@ -16,7 +16,8 @@ namespace WSCT.Fake.JavaCard
         /// <param name="destOff">Offset within destination byte array to start compare.</param>
         /// <param name="length">Byte length to be compared.</param>
         /// <returns></returns>
-        public static byte ArrayCompare(byte[] src, short srcOff, byte[] dest, short destOff, short length)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static byte arrayCompare(byte[] src, short srcOff, byte[] dest, short destOff, short length)
         {
             if (src == null || dest == null)
             {
@@ -44,7 +45,8 @@ namespace WSCT.Fake.JavaCard
         /// <param name="offset">Offset within byte array to start filling bValue into.</param>
         /// <param name="length">Number of bytes to be filled.</param>
         /// <param name="value">Value to fill the byte array with.</param>
-        public static void ArrayFillNonAtomic(byte[] array, short offset, short length, byte value)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static void arrayFillNonAtomic(byte[] array, short offset, short length, byte value)
         {
             for (int i = offset; i < offset + length; i++)
             {
@@ -60,7 +62,8 @@ namespace WSCT.Fake.JavaCard
         /// <param name="output">Destination byte array.</param>
         /// <param name="outputOffset">Offset within destination byte array to start copy into.</param>
         /// <param name="writtenLength">Byte length to be copied</param>
-        public static void ArrayCopyNonAtomic(byte[] source, short sourceOffset, byte[] output, short outputOffset, short writtenLength)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static void arrayCopyNonAtomic(byte[] source, short sourceOffset, byte[] output, short outputOffset, short writtenLength)
         {
             Array.Copy(source, sourceOffset, output, outputOffset, writtenLength);
         }
@@ -73,7 +76,8 @@ namespace WSCT.Fake.JavaCard
         /// <param name="output">Destination byte array.</param>
         /// <param name="outputOffset">Offset within destination byte array to start copy into.</param>
         /// <param name="writtenLength">Byte length to be copied</param>
-        public static void ArrayCopy(byte[] source, short sourceOffset, byte[] output, short outputOffset, short writtenLength)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static void arrayCopy(byte[] source, short sourceOffset, byte[] output, short outputOffset, short writtenLength)
         {
             Array.Copy(source, sourceOffset, output, outputOffset, writtenLength);
         }
@@ -84,7 +88,8 @@ namespace WSCT.Fake.JavaCard
         /// <param name="b1">first byte (high order byte).</param>
         /// <param name="b2">second byte (low order byte).</param>
         /// <returns></returns>
-        public static short MakeShort(byte b1, byte b2)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static short makeShort(byte b1, byte b2)
         {
             return (short)(((b1 & 0xFF) << 8) | (b2 & 0xFF));
         }
@@ -95,9 +100,10 @@ namespace WSCT.Fake.JavaCard
         /// <param name="bArray">Byte array.</param>
         /// <param name="bOff">Offset within byte array containing first byte (the high order byte).</param>
         /// <returns></returns>
-        public static short GetShort(byte[] bArray, short bOff)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static short getShort(byte[] bArray, short bOff)
         {
-            return MakeShort(bArray[bOff], bArray[bOff + 1]);
+            return makeShort(bArray[bOff], bArray[bOff + 1]);
         }
 
         /// <summary>
@@ -107,7 +113,8 @@ namespace WSCT.Fake.JavaCard
         /// <param name="bOff">Offset within byte array to deposit the first byte (the high order byte)</param>
         /// <param name="sValue">Value to set into array</param>
         /// <returns></returns>
-        public static short SetShort(byte[] bArray, short bOff, short sValue)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public static short setShort(byte[] bArray, short bOff, short sValue)
         {
             bArray[bOff] = (byte)((sValue >> 8) & 0xFF);
             bOff++;

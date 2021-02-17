@@ -55,10 +55,10 @@ namespace WSCT.Fake.TB100Like.Core
         public short Erase(short offset, short length)
         {
             // Erase data
-            Util.ArrayFillNonAtomic(memory, offset, length, (byte)MemoryState.Free);
+            Util.arrayFillNonAtomic(memory, offset, length, (byte)MemoryState.Free);
 
             // Update "written" attributes of erased words
-            Util.ArrayFillNonAtomic(attributes, (short)(offset / 4), (short)(length / 4), (byte)AttributeState.Free);
+            Util.arrayFillNonAtomic(attributes, (short)(offset / 4), (short)(length / 4), (byte)AttributeState.Free);
 
             return (short)(offset + length);
         }
@@ -156,16 +156,16 @@ namespace WSCT.Fake.TB100Like.Core
                 writtenLength = (short)(GetWrittenLength((short)(i >> 2), (short)((short)(iMax >> 2) - 1)) << 2);
                 if (secureRead)
                 {
-                    Util.ArrayFillNonAtomic(output, outputOffset, writtenLength, (byte)MemoryState.Written);
+                    Util.arrayFillNonAtomic(output, outputOffset, writtenLength, (byte)MemoryState.Written);
                 }
                 else
                 {
-                    Util.ArrayCopyNonAtomic(memory, i, output, outputOffset, writtenLength);
+                    Util.arrayCopyNonAtomic(memory, i, output, outputOffset, writtenLength);
                 }
                 i += writtenLength;
                 outputOffset += writtenLength;
                 freeLength = (short)(GetFreeLength((short)(i >> 2), (short)(iMax >> 2)) << 2);
-                Util.ArrayFillNonAtomic(output, outputOffset, freeLength, (byte)MemoryState.Free);
+                Util.arrayFillNonAtomic(output, outputOffset, freeLength, (byte)MemoryState.Free);
                 i += freeLength;
                 outputOffset += freeLength;
             }
@@ -199,7 +199,7 @@ namespace WSCT.Fake.TB100Like.Core
                 short x = GetWrittenLength((short)(index / 4), (short)((short)(index + valueLength - 1) / 4));
                 if (x == valueLengthInWords)
                 {
-                    compareResult = Util.ArrayCompare(value, valueOffset, memory, index, valueLength);
+                    compareResult = Util.arrayCompare(value, valueOffset, memory, index, valueLength);
                 }
                 index += 4;
             } while (index < lengthInBytes && compareResult != 0);
@@ -225,10 +225,10 @@ namespace WSCT.Fake.TB100Like.Core
         public short Write(byte[] source, short sourceOffset, short offset, short length)
         {
             // Store data
-            Util.ArrayCopyNonAtomic(source, sourceOffset, memory, offset, length);
+            Util.arrayCopyNonAtomic(source, sourceOffset, memory, offset, length);
 
             // Update "written" attributes of used words
-            Util.ArrayFillNonAtomic(attributes, (short)(offset / 4), (short)(length / 4), (byte)AttributeState.Written);
+            Util.arrayFillNonAtomic(attributes, (short)(offset / 4), (short)(length / 4), (byte)AttributeState.Written);
 
             return (short)(offset + length);
         }

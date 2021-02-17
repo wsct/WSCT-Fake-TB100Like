@@ -29,7 +29,8 @@ namespace WSCT.Fake.JavaCard
         /// Returns the APDU buffer byte array.
         /// </summary>
         /// <returns></returns>
-        public byte[] GetBuffer()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public byte[] getBuffer()
         {
             Array.Copy(_command.BinaryCommand, 0, _buffer, 0, _command.BinaryCommand.Length);
             Array.Clear(_buffer, _command.BinaryCommand.Length, _buffer.Length - _command.BinaryCommand.Length);
@@ -41,7 +42,8 @@ namespace WSCT.Fake.JavaCard
         /// This is the primary receive method.
         /// </summary>
         /// <returns></returns>
-        public short SetIncomingAndReceive()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public short setIncomingAndReceive()
         {
             var cApdu = (CommandAPDU)_command;
 
@@ -52,7 +54,8 @@ namespace WSCT.Fake.JavaCard
         /// This method is used to set the data transfer direction to outbound and to obtain the expected length of response (Ne).
         /// </summary>
         /// <returns></returns>
-        public short SetOutgoing()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public short setOutgoing()
         {
             var cApdu = (CommandAPDU)_command;
 
@@ -66,14 +69,15 @@ namespace WSCT.Fake.JavaCard
         /// <param name="offset">Offset into OutData array.</param>
         /// <param name="length">Byte length of the data to send.</param>
         /// <returns></returns>
-        public IFakeCardFeedback SendBytesLong(byte[] buffer, short offset, short length)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public IFakeCardFeedback sendBytesLong(byte[] buffer, short offset, short length)
         {
             _offset = offset;
             _length = length;
 
             Array.Copy(buffer, offset, _buffer, 0, _length);
 
-            Util.SetShort(_buffer, (short)(_offset + _length), unchecked((short)0x9000));
+            Util.setShort(_buffer, (short)(_offset + _length), unchecked((short)0x9000));
             _length += 2;
 
             var responseBytes = new byte[_length];
@@ -87,12 +91,13 @@ namespace WSCT.Fake.JavaCard
         /// </summary>
         /// <param name="offset">Offset into APDU buffer.</param>
         /// <param name="length">Bytelength of the data to send.</param>
-        public IFakeCardFeedback SetOutgoingAndSend(short offset, short length)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public IFakeCardFeedback setOutgoingAndSend(short offset, short length)
         {
             _offset = offset;
             _length = length;
 
-            Util.SetShort(_buffer, (short)(_offset + _length), unchecked((short)0x9000));
+            Util.setShort(_buffer, (short)(_offset + _length), unchecked((short)0x9000));
             _length += 2;
 
             var responseBytes = new byte[_length];
@@ -106,7 +111,8 @@ namespace WSCT.Fake.JavaCard
         /// </summary>
         /// <param name="le">Length of response data.</param>
         /// <returns></returns>
-        public void SetOutgoingLength(short le)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public void setOutgoingLength(short le)
         {
             _length = le;
         }

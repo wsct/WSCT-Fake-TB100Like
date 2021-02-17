@@ -12,17 +12,17 @@
 
         public static RandomData GetInstance(byte algorithm)
         {
-            switch (algorithm)
+            return algorithm switch
             {
-                case ALG_SECURE_RANDOM:
-                    return new SecureRandom();
-                default:
-                    throw new ISOException(ISO7816.SW_UNKNOWN);
-            }
+                ALG_SECURE_RANDOM => new SecureRandom(),
+                _ => throw new ISOException(ISO7816.SW_UNKNOWN),
+            };
         }
 
-        public abstract void GenerateData(byte[] buffer, short offset, short outLength);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void generateData(byte[] buffer, short offset, short outLength);
 
-        public abstract void SetSeed(byte[] buffer, short offset, short length);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        public abstract void setSeed(byte[] buffer, short offset, short length);
     }
 }

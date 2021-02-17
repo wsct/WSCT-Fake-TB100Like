@@ -21,11 +21,11 @@ namespace WSCT.Fake.JavaCard.Security
 
         #region >> Signature
 
-        public override byte GetAlgorithm() => _algorithm;
+        public override byte getAlgorithm() => _algorithm;
 
-        public override void Init(Key key, byte mode)
+        public override void init(Key key, byte mode)
         {
-            ((DESKey)key).GetKey(_cipher.Key, 0);
+            ((DESKey)key).getKey(_cipher.Key, 0);
 
             switch (mode)
             {
@@ -37,10 +37,10 @@ namespace WSCT.Fake.JavaCard.Security
             }
         }
 
-        public override void Sign(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
+        public override void sign(byte[] inBuffer, short inOffset, short inLength, byte[] outBuffer, short outOffset)
         {
             var result = _transform.TransformFinalBlock(inBuffer, inOffset, inLength);
-            Util.ArrayCopyNonAtomic(result, 0, outBuffer, outOffset, 8);
+            Util.arrayCopyNonAtomic(result, 0, outBuffer, outOffset, 8);
         }
 
         #endregion

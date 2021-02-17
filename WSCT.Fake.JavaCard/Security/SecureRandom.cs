@@ -13,12 +13,12 @@ namespace WSCT.Fake.JavaCard.Security
 
         #region >> RandomData
 
-        public override void GenerateData(byte[] buffer, short offset, short length)
+        public override void generateData(byte[] buffer, short offset, short length)
         {
             _random.GetBytes(buffer, offset, length);
         }
 
-        public override void SetSeed(byte[] buffer, short offset, short length)
+        public override void setSeed(byte[] buffer, short offset, short length)
         {
             // Nothing to do
         }
