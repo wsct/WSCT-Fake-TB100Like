@@ -29,14 +29,14 @@ namespace WSCT.Fake.ConsoleTests
                         break;
                     case "javacard":
                     default:
-                        createCardChannel = (context) => new CardChannel(context, context.Readers.Last(), new JavaCardRuntime(new JavaCardApplet()));
+                        createCardChannel = (context) => new CardChannel(context, context.Readers.Last(), new JavaCardT0ForTB100Adapter(new JavaCardApplet()));
                         processCommands = ProcessJavaCardTb100FakeCardCommands;
                         break;
                 }
             }
             else
             {
-                createCardChannel = (context) => new CardChannel(context, context.Readers.Last(), new JavaCardRuntime(new JavaCardApplet()));
+                createCardChannel = (context) => new CardChannel(context, context.Readers.Last(), new JavaCardT0ForTB100Adapter(new JavaCardApplet()));
                 processCommands = ProcessJavaCardTb100FakeCardCommands;
             }
 

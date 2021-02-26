@@ -18,7 +18,7 @@ namespace WSCT.Fake.TB100Like.Core
             return new[] { (byte)(value / 0x100), (byte)(value % 0x100) }.ToHexa();
         }
 
-        private IFakeCard CreateFakeCard() => new JavaCardRuntime(new JavaCardApplet());
+        private IFakeCard CreateFakeCard() => new JavaCardT0ForTB100Adapter(new JavaCardApplet());
 
         [TestCase(0x0000, "00 35")]
         [TestCase(0x0034, "00 35")]

@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <PackageId>WSCT.Fake.Core</PackageId>
 
+    <OutputType>Library</OutputType>
+    <OutputPath>..\out</OutputPath>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <Authors>Sylvain Vernois</Authors>

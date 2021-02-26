@@ -1,4 +1,5 @@
-﻿using WSCT.Core;
+﻿using System;
+using WSCT.Core;
 
 namespace WSCT.Fake.Core
 {
@@ -14,9 +15,21 @@ namespace WSCT.Fake.Core
         {
         }
 
-        /// <inheritdoc cref="CardChannelCore(ICardContext,string)" />
+        /// <inheritdoc cref="CardChannelCore(ICardContext,string,IFakeCard)" />
         public CardChannel(ICardContext context, string readerName, IFakeCard fakeCard)
             : base(new CardChannelCore(context, readerName, fakeCard))
+        {
+        }
+
+        /// <inheritdoc cref="CardChannelCore(Func&lt;IFakeCard&gt;)" />
+        public CardChannel(Func<IFakeCard> fakeCardFactory)
+            : base(new CardChannelCore(fakeCardFactory))
+        {
+        }
+
+        /// <inheritdoc cref="CardChannelCore(ICardContext,string,Func&lt;IFakeCard&gt;)" />
+        public CardChannel(ICardContext context, string readerName, Func<IFakeCard> fakeCardFactory)
+            : base(new CardChannelCore(context, readerName, fakeCardFactory))
         {
         }
 

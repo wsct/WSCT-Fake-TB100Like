@@ -15,7 +15,8 @@ namespace WSCT.Fake.Core
         private ICardContext _context;
         private bool _connected;
 
-        private readonly IFakeCard _fakeCard;
+        private IFakeCard _fakeCard;
+        private readonly Func<IFakeCard> _fakeCardFactory;
 
         #endregion
 
@@ -27,7 +28,7 @@ namespace WSCT.Fake.Core
         public CardChannelCore(IFakeCard fakeCard)
         {
             _connected = false;
-            _fakeCard = fakeCard;
+            _fakeCardFactory = () => fakeCard;
         }
 
         /// <summary>
@@ -35,8 +36,29 @@ namespace WSCT.Fake.Core
         /// </summary>
         /// <param name="context">Resource manager context to attach.</param>
         /// <param name="readerName">Name of the reader to use.</param>
+        /// <param name="fakeCard"></param>
         public CardChannelCore(ICardContext context, string readerName, IFakeCard fakeCard)
             : this(fakeCard)
+        {
+            Attach(context, readerName);
+        }
+
+        /// <summary>
+        /// Initializes a new instance using a factory to obtain the <see cref="IFakeCard"/> instance on reset.
+        /// </summary>
+        public CardChannelCore(Func<IFakeCard> fakeCardFactory)
+        {
+            _fakeCardFactory = fakeCardFactory;
+        }
+
+        /// <summary>
+        /// Initializes a new instance using a factory to obtain the <see cref="IFakeCard"/> instance on reset (<seealso cref="Attach"/>).
+        /// </summary>
+        /// <param name="context">Resource manager context to attach.</param>
+        /// <param name="readerName">Name of the reader to use.</param>
+        /// <param name="fakeCardFactory"></param>
+        public CardChannelCore(ICardContext context, string readerName, Func<IFakeCard> fakeCardFactory)
+            : this(fakeCardFactory)
         {
             Attach(context, readerName);
         }
@@ -60,10 +82,12 @@ namespace WSCT.Fake.Core
         }
 
         /// <inheritdoc />
-        public virtual ErrorCode Connect(ShareMode shareMode, Protocol preferedProtocol)
+        public virtual ErrorCode Connect(ShareMode shareMode, Protocol preferredProtocol)
         {
-            Protocol = preferedProtocol;
+            Protocol = preferredProtocol;
             _connected = true;
+
+            _fakeCard = _fakeCardFactory();
 
             return ErrorCode.Success;
         }

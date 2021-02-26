@@ -81,6 +81,9 @@ namespace WSCT.Fake.JavaCard
                 return false;
             }
 
+            JCSystem.ClearTransientOnDeselect();
+            JCSystem.ClearTransientOnReset();
+
             _isActive = false;
 
             return true;
@@ -90,6 +93,9 @@ namespace WSCT.Fake.JavaCard
         /// <inheritdoc />
         public bool WarmReset()
         {
+            JCSystem.ClearTransientOnDeselect();
+            JCSystem.ClearTransientOnReset();
+
             return _isActive;
         }
 
