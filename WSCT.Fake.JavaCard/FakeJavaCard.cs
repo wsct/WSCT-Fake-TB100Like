@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using WSCT.Fake.Core;
 using WSCT.ISO7816;
@@ -7,6 +9,8 @@ namespace WSCT.Fake.JavaCard
 {
     public class FakeJavaCard : IFakeCard
     {
+        private readonly List<HostedApplet> _hostedApplets = new();
+
         private Applet _applet;
         private byte[] _appletAid;
 
@@ -16,13 +20,17 @@ namespace WSCT.Fake.JavaCard
 
         private bool _isActive;
 
-        public FakeJavaCard()
-        {
-        }
-
         public FakeJavaCard(Applet applet, byte[] aid)
         {
             Install(applet, aid);
+        }
+
+        public FakeJavaCard(IEnumerable<HostedApplet> hostedApplets)
+        {
+            foreach (var (aid, applet) in hostedApplets)
+            {
+                Install(applet, aid);
+            }
         }
 
         #region >> IFakeCard
@@ -44,26 +52,47 @@ namespace WSCT.Fake.JavaCard
         /// <inheritdoc />
         public IFakeCardFeedback ExecuteCommand(CommandAPDU commandApdu)
         {
+            switch (commandApdu)
+            {
+                case { Cla: 0x00, Ins: 0xA4, P1: 0x04, P2: 0x00 }: // JavaCard SELECT of an applet
+                    var selectedApplet = _hostedApplets.FirstOrDefault(a => a.Aid.SequenceEqual(commandApdu.Udc));
+                    if (selectedApplet != null)
+                    {
+                        _applet?.deselect();
+
+                        var hostedApplet = selectedApplet;
+                        (_appletAid, _applet) = hostedApplet;
+                    }
+                    else
+                    {
+                        if (_applet == null)
+                        {
+                            return FakeCardFeedback.FromSuccess(0x6A82); // file or application not found
+                        }
+                    }
+                    break;
+            }
+
+            return ForwardCommandToCurrentApplet(commandApdu);
+        }
+
+        public IFakeCardFeedback ForwardCommandToCurrentApplet(CommandAPDU commandApdu)
+        {
             try
             {
                 _applet.IsSelectingAppletState = commandApdu.Cla == 0x00
-                    && commandApdu.Ins == 0xA4
-                    && _appletAid.SequenceEqual(commandApdu.Udc);
+                                                 && commandApdu.Ins == 0xA4
+                                                 && _appletAid.SequenceEqual(commandApdu.Udc);
 
                 var apdu = new APDU(commandApdu);
 
                 _applet.process(apdu);
 
-                byte[] responseBytes = apdu.ResponseBuffer.Take(apdu.ResponseLength).ToArray();
-
-                if (apdu.ResponseLength == 0)
+                var responseBytes = apdu.ResponseLength switch
                 {
-                    responseBytes = apdu.ResponseBuffer.Take(apdu.ResponseLength).Concat(new byte[] { 0x90, 0x00 }).ToArray();
-                }
-                else
-                {
-                    responseBytes = apdu.ResponseBuffer.Take(apdu.ResponseLength).ToArray();
-                }
+                    0 => apdu.ResponseBuffer.Take(apdu.ResponseLength).Concat(new byte[] { 0x90, 0x00 }).ToArray(),
+                    _ => apdu.ResponseBuffer.Take(apdu.ResponseLength).ToArray()
+                };
 
                 return FakeCardFeedback.FromSuccess(responseBytes);
             }
@@ -103,15 +132,14 @@ namespace WSCT.Fake.JavaCard
 
         public void Install(Applet applet, byte[] aid)
         {
-            _applet = applet;
-            _appletAid = aid;
+            _hostedApplets.Add(new HostedApplet(aid, applet));
 
             // buffer : [aidLength] (aid)
             var buffer = new byte[1 + aid.Length];
             buffer[0] = (byte)aid.Length;
             Array.Copy(aid, 0, buffer, 1, aid.Length);
 
-            _applet.install(buffer, 0, (byte)buffer.Length);
+            applet.install(buffer, 0, (byte)buffer.Length);
         }
 
         public void SetAtr(byte[] atr)

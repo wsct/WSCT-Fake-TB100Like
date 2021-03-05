@@ -30,7 +30,8 @@
             // TODO ?
         }
 
-        protected bool SelectingApplet() => IsSelectingAppletState;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
+        protected bool selectingApplet() => IsSelectingAppletState;
 
         internal bool IsSelectingAppletState { private get; set; }
     }
