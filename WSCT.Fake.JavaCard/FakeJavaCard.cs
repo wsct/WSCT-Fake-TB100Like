@@ -98,7 +98,15 @@ namespace WSCT.Fake.JavaCard
             }
             catch (ISOException exception)
             {
-                return FakeCardFeedback.FromSuccess(exception.StatusWord);
+                return FakeCardFeedback.FromSuccess(exception.getReason());
+            }
+            catch (PINException)
+            {
+                return FakeCardFeedback.FromSuccess(0x6F00);
+            }
+            catch (Exception)
+            {
+                return FakeCardFeedback.FromSuccess(0x6F00);
             }
         }
 

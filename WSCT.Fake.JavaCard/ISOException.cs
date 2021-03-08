@@ -5,20 +5,14 @@ namespace WSCT.Fake.JavaCard
     /// <summary>
     /// ISOException class encapsulates an ISO 7816-4 response status word as its reason code.
     /// </summary>
-    public class ISOException : Exception
+    public class ISOException : CardRuntimeException
     {
-        /// <summary>
-        /// Status word of the exception.
-        /// </summary>
-        public short StatusWord { get; set; }
-
         /// <summary>
         /// Constructs an ISOException instance with the specified status word.
         /// </summary>
-        /// <param name="statusWord">ISO 7816-4 defined status word.</param>
-        public ISOException(short statusWord) : base($"JavaCard ISOException throws with SW: {statusWord}")
+        /// <param name="sw">ISO 7816-4 defined status word.</param>
+        public ISOException(short sw) : base(sw)
         {
-            StatusWord = statusWord;
         }
 
 
@@ -27,7 +21,7 @@ namespace WSCT.Fake.JavaCard
         /// </summary>
         /// <param name="sw">ISO 7816-4 defined status word.</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
-        public static void throwIt(short sw)
+        public new static void throwIt(short sw)
         {
             throw new ISOException(sw);
         }

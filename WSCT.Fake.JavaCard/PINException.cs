@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace WSCT.Fake.JavaCard
+﻿namespace WSCT.Fake.JavaCard
 {
-    public class PINException : Exception
+    public class PINException : CardRuntimeException
     {
         /// <summary>
         /// This reason code is used to indicate that one or more input parameters is out of allowed bounds.
@@ -10,10 +8,15 @@ namespace WSCT.Fake.JavaCard
         public const short ILLEGAL_VALUE = 1;
 
         /// <summary>
+        /// This reason code is used to indicate a method has been invoked at an illegal or inappropriate time.
+        /// </summary>
+        public const short ILLEGAL_STATE = 2;
+
+        /// <summary>
         /// Constructs a PINException. To conserve on resources use  <code>throwIt()</code> to employ the Java Card runtime environment-owned instance of this class.
         /// </summary>
         /// <param name="reason">the reason for the exception</param>
-        public PINException(short reason) : base($"{reason}")
+        public PINException(short reason) : base(reason)
         {
         }
 
@@ -32,7 +35,7 @@ namespace WSCT.Fake.JavaCard
         /// <param name="reason">the reason for the exception</param>
         /// <exception cref="PINException">always</exception>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "JavaCard method")]
-        public static void throwIt(short reason)
+        public new static void throwIt(short reason)
         {
             throw new PINException(reason);
         }
