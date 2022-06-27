@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
-    <Version>1.4.1</Version>
+    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <Version>1.5.0</Version>
     <PackageId>WSCT.Fake.JavaCard</PackageId>
 
 
@@ -15,11 +15,17 @@
     <Product>WSCT</Product>
     
     <LangVersion>9.0</LangVersion>
+    
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    
+    <PackageProjectUrl>https://github.com/wsct/WSCT-Fake-TB100Like</PackageProjectUrl>
+    
+    <RepositoryUrl>https://github.com/wsct/WSCT-Fake-TB100Like</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Portable.BouncyCastle" Version="1.8.9" />
-    <PackageReference Include="WSCT.Helpers" Version="5.0.2" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+    <PackageReference Include="WSCT.Helpers" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>

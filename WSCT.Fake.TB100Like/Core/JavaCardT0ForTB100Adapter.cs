@@ -66,7 +66,7 @@ namespace WSCT.Fake.TB100Like.Core
             }
             catch (ISOException isoException)
             {
-                return FakeCardFeedback.FromSuccess(isoException.StatusWord);
+                return FakeCardFeedback.FromSuccess(isoException.getReason());
             }
 
             if (response.RApdu.Udr.Length == 0 || cApdu.IsCc2)
